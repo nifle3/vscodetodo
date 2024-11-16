@@ -1,4 +1,6 @@
 const esbuild = require("esbuild");
+const { sveltePreprocess } = require("svelte-preprocess");
+const sveltePlugin = require('esbuild-svelte');
 
 const production = process.argv.includes('--production');
 const watch = process.argv.includes('--watch');
@@ -38,8 +40,10 @@ async function main() {
 		external: ['vscode'],
 		logLevel: 'silent',
 		plugins: [
-			/* add to the end of plugins array */
 			esbuildProblemMatcherPlugin,
+			sveltePlugin({
+				preprocess: sveltePreprocess(),
+			}),
 		],
 	});
 	if (watch) {
